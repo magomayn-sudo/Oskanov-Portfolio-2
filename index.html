@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Magomed Oskanov — Documentary Video Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #0b0b0b;
+      --header-bg: rgba(13, 13, 13, 0.95);
+      --text-main: #e6e6e6;
+      --text-white: #ffffff;
+      --text-muted: #888888;
+      --accent: #ff3300;
+      --border-color: #262626;
+      --header-height: 78px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      overflow-x: hidden;
+      padding-top: var(--header-height);
+    }
+
+    /* Верхняя закрепленная панель */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--header-height);
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 42px;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text-white);
+      text-decoration: none;
+      letter-spacing: -0.03em;
+      transition: transform 0.25s ease, text-shadow 0.25s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.45);
+    }
+
+    /* Статус доступности по центру шапки */
+    .header-status {
+      position: absolute;
+      left: 44%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #b5b5b5;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 7px 16px;
+      border-radius: 100px;
+      user-select: none;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      transition: transform 0.25s ease, text-shadow 0.25s ease, filter 0.25s ease;
+      display: inline-block;
+    }
+
+    nav a:hover {
+      transform: scale(1.08);
+      filter: brightness(1.2);
+      text-shadow: 0 0 15px rgba(255, 51, 0, 0.8);
+    }
+
+    /* Секции с сохранением эффекта подглядывания снизу */
+    section {
+      width: 100%;
+      border-bottom: 1px solid var(--border-color);
+      scroll-margin-top: var(--header-height);
+      padding: 60px 6%;
+    }
+
+    #about {
+      min-height: calc(81vh - var(--header-height));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 52px;
+    }
+
+    #reedits,
+    #results {
+      min-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #contact {
+      min-height: 66vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: none;
+    }
+
+    /* Первая страница: About */
+    .hero-text {
+      max-width: 560px;
+      flex: 1;
+    }
+
+    .im-label {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-left: 28px;
+      margin-bottom: 5px;
+      font-weight: 400;
+    }
+
+    .hero-title {
+      font-size: clamp(42px, 4.3vw, 66px);
+      line-height: 1.08;
+      text-transform: uppercase;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-title .first-name {
+      display: block;
+      font-weight: 400;
+    }
+
+    .hero-title .last-name {
+      display: block;
+      font-weight: 700;
+    }
+
+    .dot {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .hero-subtitle {
+      margin-top: 26px;
+      font-size: clamp(17px, 1.35vw, 21px);
+      line-height: 1.48;
+      color: var(--text-white);
+      font-weight: 500;
+      max-width: 520px;
+    }
+
+    .accent-text {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Карточки видео */
+    .video-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero-video-wrapper {
+      width: 100%;
+      max-width: 620px;
+      flex: 1;
+    }
+
+    .video-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background-color: #000;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .video-card:hover {
+      transform: scale(1.03);
+      border-color: #ffffff;
+      box-shadow: 0 0 26px rgba(255, 255, 255, 0.24);
+    }
+
+    .video-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .play-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 48px;
+      background-color: rgba(20, 20, 20, 0.84);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    .video-card:hover .play-btn {
+      background-color: rgba(255, 51, 0, 0.92);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    .play-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #ffffff;
+      margin-left: 3px;
+    }
+
+    .video-card iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Подписи под видео (просмотры и пометка Re-edit) */
+    .video-meta {
+      display: flex;
+      align-items: center;
+      padding: 2px 4px 0 4px;
+    }
+
+    .views-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 16px;
+      color: var(--text-white);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .meta-icon {
+      width: 13px;
+      height: 13px;
+      fill: rgba(255, 255, 255, 0.45);
+      flex-shrink: 0;
+      transform: translateY(0.5px);
+    }
+
+    /* Заголовки секций и сетка на 3 видео */
+    .section-title {
+      font-size: clamp(36px, 3.5vw, 54px);
+      font-weight: 400;
+      text-transform: uppercase;
+      color: #cccccc;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title strong {
+      font-weight: 700;
+      color: #e6e6e6;
+    }
+
+    .three-col-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 38px;
+      margin: auto 0;
+      padding: 42px 0;
+    }
+
+    /* Четвертая страница: Contact */
+    .contact-left {
+      max-width: 560px;
+    }
+
+    .contact-cta {
+      margin-top: 38px;
+      font-size: clamp(21px, 1.9vw, 30px);
+      line-height: 1.38;
+      font-weight: 500;
+      color: var(--text-white);
+    }
+
+    .contact-right {
+      border-left: 2px solid #333333;
+      padding: 28px 0 28px 68px;
+      margin-right: 10%;
+      display: flex;
+      flex-direction: column;
+      gap: 54px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      text-decoration: none;
+      color: var(--text-white);
+      font-size: 28px;
+      font-weight: 500;
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .social-icon {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0b0b;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .social-icon svg {
+      width: 38px;
+      height: 38px;
+      fill: #ffffff;
+    }
+
+    .social-link:hover {
+      transform: scale(1.07);
+      filter: brightness(1.2);
+    }
+
+    .social-link:hover .social-icon {
+      border-color: #ffffff;
+      box-shadow: 0 0 22px rgba(255, 255, 255, 0.5);
+    }
+
+    .social-link:hover span {
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.55);
+    }
+
+    /* Адаптивность для ноутбуков, планшетов и телефонов */
+    @media (max-width: 1180px) {
+      .header-status {
+        display: none;
+      }
+    }
+
+    @media (max-width: 960px) {
+      :root {
+        --header-height: 70px;
+      }
+
+      header {
+        padding: 0 20px;
+      }
+
+      .logo {
+        font-size: 24px;
+      }
+
+      nav {
+        gap: 18px;
+      }
+
+      nav a {
+        font-size: 16px;
+      }
+
+      #about {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 48px 24px;
+      }
+
+      .hero-video-wrapper {
+        max-width: 100%;
+      }
+
+      #reedits,
+      #results {
+        padding: 48px 24px;
+      }
+
+      .three-col-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 32px 0;
+      }
+
+      #contact {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 48px;
+        padding: 48px 24px;
+      }
+
+      .contact-right {
+        margin-right: 0;
+        padding-left: 32px;
+        gap: 36px;
+      }
+
+      .social-icon {
+        width: 68px;
+        height: 68px;
+      }
+
+      .social-icon svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      .social-link {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Верхняя закрепленная панель -->
+  <header>
+    <a href="#about" class="logo">Oskanov</a>
+    <div class="header-status">
+      <span class="status-dot"></span>
+      <span>Available for new projects</span>
+    </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#reedits">Re-edits</a>
+      <a href="#results">Results</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Страница 1: About + Главный Ре-эдит №1 -->
+  <section id="about">
+    <div class="hero-text">
+      <div class="im-label">I'm</div>
+      <h1 class="hero-title">
+        <span class="first-name">MAGOMED</span>
+        <span class="last-name">OSKANOV<span class="dot">.</span></span>
+      </h1>
+      <p class="hero-subtitle">
+        Documentary YouTube editor focused on narrative structure and emotional pacing.<br><br>
+        Every visual, graphic, and cut is placed with <span class="accent-text">intent</span> — knowing exactly what to show and when.
+      </p>
+    </div>
+
+    <div class="hero-video-wrapper">
+      <div class="video-item">
+        <!-- Ре-эдит 1: https://youtu.be/SHUHanOypac (Обложка: cover1.jpg) -->
+        <div class="video-card" data-video-id="SHUHanOypac">
+          <img src="cover1.jpg" onerror="this.onerror=null; this.src='https://i.ytimg.com/vi/SHUHanOypac/hqdefault.jpg';" alt="Featured Concept Re-edit">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+            </svg>
+            Featured Concept Re-edit
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Страница 2: Остальные 3 Concept Re-edits -->
+  <section id="reedits">
+    <h2 class="section-title">CONCEPT <strong>RE-EDITS</strong> <span class="dot">.</span></h2>
+
+    <div class="three-col-grid">
+      <!-- Ре-эдит 2: https://youtu.be/k4JvLFsGE1U (Обложка: cover2.jpg) -->
+      <div class="video-item">
+        <div class="video-card" data-video-id="k4JvLFsGE1U">
+          <img src="cover2.jpg" onerror="this.onerror=null; this.src='https://i.ytimg.com/vi/k4JvLFsGE1U/hqdefault.jpg';" alt="Concept Re-edit 2">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+            </svg>
+            Concept Re-edit
+          </span>
+        </div>
+      </div>
+
+      <!-- Ре-эдит 3: https://youtu.be/mXOfidhp5do (Обложка: cover3.jpg) -->
+      <div class="video-item">
+        <div class="video-card" data-video-id="mXOfidhp5do">
+          <img src="cover3.jpg" onerror="this.onerror=null; this.src='https://i.ytimg.com/vi/mXOfidhp5do/hqdefault.jpg';" alt="Concept Re-edit 3">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+            </svg>
+            Concept Re-edit
+          </span>
+        </div>
+      </div>
+
+      <!-- Ре-эдит 4: https://youtu.be/8BEG3hHJflM (Обложка: cover4.jpg) -->
+      <div class="video-item">
+        <div class="video-card" data-video-id="8BEG3hHJflM">
+          <img src="cover4.jpg" onerror="this.onerror=null; this.src='https://i.ytimg.com/vi/8BEG3hHJflM/hqdefault.jpg';" alt="Concept Re-edit 4">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+            </svg>
+            Concept Re-edit
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Страница 3: Proven Results (Видео для клиентов с результатами) -->
+  <section id="results">
+    <h2 class="section-title">PROVEN <strong>RESULTS</strong> <span class="dot">.</span></h2>
+
+    <div class="three-col-grid">
+      <!-- Клиентское видео 1 (195K просмотров): https://youtu.be/S-5VN8eosdc -->
+      <div class="video-item">
+        <div class="video-card" data-video-id="S-5VN8eosdc">
+          <img src="https://i.ytimg.com/vi/S-5VN8eosdc/maxresdefault.jpg" alt="Client Video 195K Views">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+            195K+ views
+          </span>
+        </div>
+      </div>
+
+      <!-- Клиентское видео 2 (130K просмотров): https://youtu.be/a22MdmKuLLo -->
+      <div class="video-item">
+        <div class="video-card" data-video-id="a22MdmKuLLo">
+          <img src="https://i.ytimg.com/vi/a22MdmKuLLo/maxresdefault.jpg" alt="Client Video 130K Views">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+            130K+ views
+          </span>
+        </div>
+      </div>
+
+      <!-- Клиентское видео 3 (436K просмотров): https://youtu.be/_pPSPDNQeCI -->
+      <div class="video-item">
+        <div class="video-card" data-video-id="_pPSPDNQeCI">
+          <img src="https://i.ytimg.com/vi/_pPSPDNQeCI/maxresdefault.jpg" alt="Client Video 436K Views">
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="video-meta">
+          <span class="views-badge">
+            <svg class="meta-icon" viewBox="0 0 24 24">
+              <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+            </svg>
+            436K+ views
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Страница 4: Contact -->
+  <section id="contact">
+    <div class="contact-left">
+      <h2 class="section-title">CONTACT <strong>ME</strong><span class="dot">.</span></h2>
+      <p class="contact-cta">
+        <span class="accent-text">Let’s talk</span> — DM me to discuss<br>
+        your channel and goals
+      </p>
+    </div>
+
+    <div class="contact-right">
+      <a href="https://x.com/oskanov_editor" target="_blank" rel="noopener noreferrer" class="social-link">
+        <div class="social-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </div>
+        <span>X (Twitter)</span>
+      </a>
+
+      <a href="https://t.me/MagomedOskanovCC" target="_blank" rel="noopener noreferrer" class="social-link">
+        <div class="social-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+        </div>
+        <span>Telegram</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Скрипт для запуска YouTube-видео по клику -->
+  <script>
+    document.querySelectorAll('.video-card').forEach(card => {
+      card.addEventListener('click', function () {
+        if (this.querySelector('iframe')) return;
+        const videoId = this.getAttribute('data-video-id');
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`);
+        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+        iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+        iframe.setAttribute('allowfullscreen', 'true');
+        this.innerHTML = '';
+        this.appendChild(iframe);
+      });
+    });
+  </script>
+
+</body>
+</html>
