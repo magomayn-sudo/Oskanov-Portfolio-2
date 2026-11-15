@@ -668,9 +668,38 @@
       </a>
     </div>
   </section>
-
-  <!-- Скрипт для запуска YouTube-видео по клику -->
+<!-- Умный скрипт для подгрузки обложек любого формата и запуска видео -->
   <script>
+    const reeditCards = [
+      { id: 'SHUHanOypac', base: 'cover1' },
+      { id: 'k4JvLFsGE1U', base: 'cover2' },
+      { id: 'mXOfidhp5do', base: 'cover3' },
+      { id: '8BEG3hHJflM', base: 'cover4' }
+    ];
+
+    const extensions = ['.jpg', '.png', '.webp', '.jpeg', '.JPG', '.PNG', '.jpg.png', '.jpg.jpg', '.png.png'];
+
+    reeditCards.forEach(({ id, base }) => {
+      const card = document.querySelector(`.video-card[data-video-id="${id}"]`);
+      if (!card) return;
+      const img = card.querySelector('img');
+      let index = 0;
+
+      function tryNextExtension() {
+        if (index < extensions.length) {
+          const testSrc = base + extensions[index++];
+          const probe = new Image();
+          probe.onload = () => { img.src = testSrc; };
+          probe.onerror = tryNextExtension;
+          probe.src = testSrc;
+        } else {
+          img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+        }
+      }
+
+      tryNextExtension();
+    });
+
     document.querySelectorAll('.video-card').forEach(card => {
       card.addEventListener('click', function () {
         if (this.querySelector('iframe')) return;
@@ -685,6 +714,3 @@
       });
     });
   </script>
-
-</body>
-</html>
